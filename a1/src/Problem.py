@@ -6,7 +6,7 @@ def setInitialState(s: list) -> list:
     initialState = s
     return copy.deepcopy(s)
 
-def successor(n: Node) -> list:
+def getSuccessors(n: Node) -> list:
     """Successor Function - Retrieves all current node's direct successors.
 
     Args:
@@ -22,9 +22,9 @@ def successor(n: Node) -> list:
         successors.insert(0, currNode.parent)
         currNode = currNode.parent
 
-    return successor
+    return successors
 
-def g(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
+def reachGoal(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
     """Goal Test - Determines whether a given state is the goal state.
 
     Args:
@@ -45,5 +45,5 @@ def g(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
     
     return True
 
-def c(sX: any | None = None, a: function | None = None, nY: any | None = None) -> int:
+def getPathCost(sX: any | None = None, a: function | None = None, nY: any | None = None) -> int:
     return 1
