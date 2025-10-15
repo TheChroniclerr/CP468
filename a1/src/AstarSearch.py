@@ -1,4 +1,5 @@
 from Node import Node
+from Actions import Actions
 import Problem
 import Heuristics
 import Analytics
@@ -16,12 +17,13 @@ def AstarSearch(n: Node, h: function) -> Node | None:
     Analytics.newRecord(h.__name__)
     frontierQueue: list = [n]
     while(frontierQueue and not Problem.g(frontierQueue[0].state)):         # check for goal state
-        oldN: Node = frontierQueue.pop(0)
-        for actionName, action in Problem.actions:
-            newS: list | None = action(oldN.state)
-            newP: Node = oldN
+        oldNode: Node = frontierQueue.pop(0)
+        oldActions: Actions = Actions(oldNode.state)
+        for actionName in ["U", "D", "L", "R"]:
+            newS: list | None = oldActions.result(actionName)
+            newP: Node = oldNode
             newA: function = actionName
-            newPC: int = Problem.c() + oldN.pathCost    # g(n)
+            newPC: int = Problem.c() + oldNode.pathCost    # g(n)
             
             if not(newS is None):
                 frontierQueue.append(Node(newS, newP, newA, newPC))
