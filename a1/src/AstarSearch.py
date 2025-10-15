@@ -1,6 +1,7 @@
 from Node import Node
 import Problem
 import Heuristics
+import Analytics
 
 def AstarSearch(n: Node, h: function) -> Node | None:
     """Using A* search algorithm to solve the problems as graph searches.
@@ -12,6 +13,7 @@ def AstarSearch(n: Node, h: function) -> Node | None:
     Returns:
         Node: The node of the goal state.
     """
+    Analytics.newRecord(h.__name__)
     frontierQueue: list = [n]
     while(frontierQueue and not Problem.g(frontierQueue[0].state)):         # check for goal state
         oldN: Node = frontierQueue.pop(0)
@@ -23,6 +25,7 @@ def AstarSearch(n: Node, h: function) -> Node | None:
             
             if not(newS is None):
                 frontierQueue.append(Node(newS, newP, newA, newPC))
+                Analytics.incrementRecord(h.__name__, "nodesExpanded")
             
         frontierQueue.sort(key=lambda p: p.pathCost + Heuristics.h1(n))     # f(n) = g(n) + h(n)
     

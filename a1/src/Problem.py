@@ -3,6 +3,10 @@ import copy
 
 from Node import Node
 
+initialState: list = []
+def setInitialState(s: list) -> list:
+    initialState = s
+    return copy.deepcopy(s)
 
 def up(s: list) -> list | None:
     """Move the tile below the blank tile upwards.
@@ -126,9 +130,6 @@ actions: dict = {
 # def result(n: Node, a) -> Node:
 #     return
 
-def c(sX: any | None = None, a: function | None = None, nY: any | None = None) -> int:
-    return 1
-
 def g(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
     """Goal Test - Determines whether a given state is a goal state.
 
@@ -149,3 +150,6 @@ def g(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
         if i != j: return False
     
     return True
+
+def c(sX: any | None = None, a: function | None = None, nY: any | None = None) -> int:
+    return 1
