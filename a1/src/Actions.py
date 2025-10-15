@@ -1,6 +1,6 @@
-from typing import Literal
-from copy import deepcopy
 import math
+from copy import deepcopy
+from typing import Literal
 
 ActionsType = Literal["U", "D", "L", "R"]
 
@@ -11,13 +11,13 @@ class Actions:
         Args:
             s (list): State to perform action to.
         """
-        assert type(s) != list or not(math.sqrt(len(self.s)).is_integer()) , "Invalid size of puzzle."
+        assert s and isinstance(s, list) and math.sqrt(len(s)).is_integer(), "Invalid puzzle size."
         
         self.s = s
         self.width: int = int(math.sqrt(len(s)))    # get the n of n-puzzle (n by n)
-        self.blankPos: int | None = self._findBlankTileIndex(self)  # index of blank tile
-        assert self.blankPos, "Invalid puzzle."
-        self.validActions: list = self._findValidActions(self)      # list of valid actions
+        self.blankPos: int | None = self._findBlankTileIndex()  # index of blank tile
+        assert self.blankPos != -1, "Invalid puzzle, no blank tile."
+        self.validActions: list[str] = self._findValidActions()      # list of valid actions
     
     def result(self, a: ActionsType) -> list | None:
         """Transition Model - Alternative method of action call using ActionType keys.
@@ -34,9 +34,8 @@ class Actions:
             "L": self.left,
             "R": self.right
         }
-        newS: list = deepcopy(self.s)
-        
-        return actionsMap[a]
+
+        return actionsMap[a]()
     
     def up(self) -> list | None:
         """Action - Move the tile below the blank tile upwards.
@@ -44,9 +43,8 @@ class Actions:
         Returns:
             list | None: Return list if move successful, else None.
         """
-        newS: list = deepcopy(self.s)   # prevent shifting argument list
-        
         if "U" in self.validActions:
+            newS: list = deepcopy(self.s)
             self._shiftTile(newS, self.blankPos + self.width)
             return newS
         return None
@@ -57,23 +55,9 @@ class Actions:
         Returns:
             list | None: Return list if move successful, else None.
         """
-        newS: list = deepcopy(self.s)   # prevent shifting argument list
-        
         if "D" in self.validActions:
+            newS: list = deepcopy(self.s)
             self._shiftTile(newS, self.blankPos - self.width)
-            return newS
-        return None
-    
-    def right(self) -> list | None:
-        """Action - Move the tile left of the blank tile rightward.
-
-        Returns:
-            list | None: Return list if move successful, else None.
-        """
-        newS: list = deepcopy(self.s)   # prevent shifting argument list
-        
-        if "D" in self.validActions:
-            self._shiftTile(newS, self.blankPos - 1)
             return newS
         return None
     
@@ -83,10 +67,21 @@ class Actions:
         Returns:
             list | None: Return list if move successful, else None.
         """
-        newS: list = deepcopy(self.s)   # prevent shifting argument list
-        
-        if "D" in self.validActions:
+        if "L" in self.validActions:
+            newS: list = deepcopy(self.s)
             self._shiftTile(newS, self.blankPos + 1)
+            return newS
+        return None
+    
+    def right(self) -> list | None:
+        """Action - Move the tile left of the blank tile rightward.
+
+        Returns:
+            list | None: Return list if move successful, else None.
+        """
+        if "R" in self.validActions:
+            newS: list = deepcopy(self.s)
+            self._shiftTile(newS, self.blankPos - 1)
             return newS
         return None
 
@@ -101,9 +96,7 @@ class Actions:
         Returns:
             list: Final state.
         """
-        newS[self.blankPos - 1] = newS[srcPos - 1]     # move number from source tile to blank tile
-        newS[srcPos - 1] = None     # clear the original source tile number
-        
+        newS[self.blankPos], newS[srcPos] = newS[srcPos], None
         return newS
 
     # Configuration functions
@@ -113,13 +106,9 @@ class Actions:
         Returns:
             int: Index of the blank tile.
         """
-        i: int = 1
-        
-        for tile in self.s:
-            if tile == None or tile == 0:
+        for i, tile in enumerate(self.s):
+            if tile is None:
                 return i
-            i += 1
-
         return -1
 
     def _findValidActions(self) -> list:
@@ -130,9 +119,9 @@ class Actions:
         """
         validActions: list = [];
         
-        if 1 <= self.blankPos + self.width <= len(self.s) + 1: validActions.append("U")     # check bottom
-        if 1 <= self.blankPos - self.width <= len(self.s) + 1: validActions.append("D")     # check top
-        if not(self.blankPos % self.width == 1): validActions.append("R")   # check left
-        if not(self.blankPos % self.width == 0): validActions.append("L")   # check right
+        if 0 <= self.blankPos + self.width < len(self.s): validActions.append("U")     # check bottom
+        if 0 <= self.blankPos - self.width < len(self.s): validActions.append("D")     # check top
+        if (self.blankPos % self.width) != 0: validActions.append("R")   # check left
+        if (self.blankPos % self.width) != (self.width - 1): validActions.append("L")   # check right
         
         return validActions
