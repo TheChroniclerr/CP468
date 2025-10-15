@@ -24,34 +24,26 @@ def getSuccessors(n: Node) -> list:
 
     return successors
 
-def reachGoal(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
+def reachGoal(sX: list, sY: list = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
     """Goal Test - Determines whether a given state is the goal state.
 
     Args:
-        sX (any): Current state.
-        sY (any): Goal state.
+        sX (list): Current state.
+        sY (list, optional): Goal state. Defaults to [1, 2, 3, 4, 5, 6, 7, 8, None].
 
     Returns:
         bool: True if goal state is reached, else False.
     """
-    if type(sX) != type(sY):
-        return False
-    elif type(sX) == list:
-        for i, j in sX, sY:
-            if i != j: return False
-    else:
-        if i != j: return False
-    
-    return True
+    return sX == sY
 
-def getPathCost(sX: any = None, a: function | None = None, nY: any = None) -> int:
+def getPathCost(sX: list = None, a: function | None = None, nY: list = None) -> int:
     """Path Cost - Assigns a numeric cost to each path (action) from previous to current state.
     For this specific problem, the action cost is always 1.
 
     Args:
-        sX (any, optional): Initial state. Defaults to None.
+        sX (list, optional): Initial state. Defaults to None.
         a (function | None, optional): Action function. Defaults to None.
-        nY (any, optional): Final state. Defaults to None.
+        nY (list, optional): Final state. Defaults to None.
 
     Returns:
         int: 1

@@ -12,3 +12,16 @@ class Node:
         self.parent = parent
         self.action = action
         self.pathCost = pathCost    # g(n)
+    
+    def getSuccessors(self) -> list:
+        """Successor Function - Retrieves all current node's direct successors.
+
+        Returns:
+            list: A list of successors ordered from ancestor to descendant.
+        """
+        successors: list = [self]
+        
+        while(successors[0].parent):
+            successors.insert(0, successors[0].parent)
+
+        return successors
