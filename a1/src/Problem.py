@@ -6,7 +6,19 @@ class Problem:
     def __init__(self, initialState: list, goalState: list, heuristic: Heuristics.Type):
         self.initialState = initialState
         self.goalState = goalState
-        self.h: Callable = Heuristics.Function[heuristic]
+        self.h = heuristic
+
+def h(self, s: list) -> int:    # rounding error?
+    """Gate function that forces Heuristics function to be called in Problem instance.
+    Find the heuristic value for the current state and pre-defined goal state.
+
+    Args:
+        s (list): Current state.
+
+    Returns:
+        int: estimated cost from current state to goal state.
+    """
+    return Heuristics.Function[self.h](s, self.goalState)
 
 def setAction(self, s: list) -> Actions:
     """Gate function that forces Actions instantiation from Problem instance.
