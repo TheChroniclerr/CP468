@@ -8,7 +8,6 @@ class Node:
             action (str | None): Action parent node took to reach current state, None for root node.
             pathCost (int, optional): g(n) - the cost from initial state to current state. Defaults to 1.
         """
-        
         self.state = state
         self.parent = parent
         self.action = action

@@ -34,7 +34,6 @@ def reachGoal(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
     Returns:
         bool: True if goal state is reached, else False.
     """
-    
     if type(sX) != type(sY):
         return False
     elif type(sX) == list:
@@ -45,5 +44,16 @@ def reachGoal(sX: any, sY: any = [1, 2, 3, 4, 5, 6, 7, 8, None]) -> bool:
     
     return True
 
-def getPathCost(sX: any | None = None, a: function | None = None, nY: any | None = None) -> int:
+def getPathCost(sX: any = None, a: function | None = None, nY: any = None) -> int:
+    """Path Cost - Assigns a numeric cost to each path (action) from previous to current state.
+    For this specific problem, the action cost is always 1.
+
+    Args:
+        sX (any, optional): Initial state. Defaults to None.
+        a (function | None, optional): Action function. Defaults to None.
+        nY (any, optional): Final state. Defaults to None.
+
+    Returns:
+        int: 1
+    """
     return 1

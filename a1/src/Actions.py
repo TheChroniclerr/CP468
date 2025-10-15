@@ -2,18 +2,22 @@ from typing import Literal
 from copy import deepcopy
 import math
 
-
 ActionsType = Literal["U", "D", "L", "R"]
 
 class Actions:
     def __init__(self, s: list) -> None:
+        """Class constructor.
+
+        Args:
+            s (list): State to perform action to.
+        """
         assert type(s) != list or not(math.sqrt(len(self.s)).is_integer()) , "Invalid size of puzzle."
         
         self.s = s
-        self.width: int = int(math.sqrt(len(s)))     # get the n of n-puzzle (n by n)
-        self.blankPos: int | None = self._findBlankTileIndex(self)   # index of blank tile
+        self.width: int = int(math.sqrt(len(s)))    # get the n of n-puzzle (n by n)
+        self.blankPos: int | None = self._findBlankTileIndex(self)  # index of blank tile
         assert self.blankPos, "Invalid puzzle."
-        self.validActions: list = self._findValidActions(self)  # list of valid actions
+        self.validActions: list = self._findValidActions(self)      # list of valid actions
     
     def result(self, a: ActionsType) -> list | None:
         """Transition Model - Alternative method of action call using ActionType keys.
@@ -87,13 +91,28 @@ class Actions:
         return None
 
     def _shiftTile(self, newS: list, srcPos: int) -> list:
+        """Shift the tile in the desired direction.
+        Shift from a copy of the puzzle.
+
+        Args:
+            newS (list): A copy to shift from.
+            srcPos (int): Index of tile to be shifted.
+
+        Returns:
+            list: Final state.
+        """
         newS[self.blankPos - 1] = newS[srcPos - 1]     # move number from source tile to blank tile
-        newS[srcPos - 1] = None                # clear the original source tile number
+        newS[srcPos - 1] = None     # clear the original source tile number
         
         return newS
 
     # Configuration functions
     def _findBlankTileIndex(self) -> int:
+        """Find the blank tile in the n-puzzle.
+
+        Returns:
+            int: Index of the blank tile.
+        """
         i: int = 1
         
         for tile in self.s:
@@ -104,11 +123,16 @@ class Actions:
         return -1
 
     def _findValidActions(self) -> list:
+        """Check if it is possible to move up/down/left/right.
+
+        Returns:
+            list: All valid actions.
+        """
         validActions: list = [];
         
-        if 1 <= self.blankPos + self.width <= len(self.s) + 1: validActions.append("U")    # check bottom
-        if 1 <= self.blankPos - self.width <= len(self.s) + 1: validActions.append("D")    # check top
-        if not(self.blankPos % self.width == 1): validActions.append("R")             # check left
-        if not(self.blankPos % self.width == 0): validActions.append("L")             # check right
+        if 1 <= self.blankPos + self.width <= len(self.s) + 1: validActions.append("U")     # check bottom
+        if 1 <= self.blankPos - self.width <= len(self.s) + 1: validActions.append("D")     # check top
+        if not(self.blankPos % self.width == 1): validActions.append("R")   # check left
+        if not(self.blankPos % self.width == 0): validActions.append("L")   # check right
         
         return validActions

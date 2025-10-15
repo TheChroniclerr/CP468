@@ -14,7 +14,6 @@ def AstarSearch(n: Node, h: Callable[[Node], int]) -> Node | None:
     Returns:
         Node: The node of the goal state.
     """
-    
     Analytics.newRecord(h.__name__)
     frontierQueue: list[Node] = [n]
     
