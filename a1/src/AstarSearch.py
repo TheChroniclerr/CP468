@@ -17,8 +17,11 @@ def AstarSearch(problem: Problem) -> Node | None:
     # Analytics.incrementRecord()
     rootNode: Node = Node(problem.initialState, None, None, 0)
     frontierQueue: list[Node] = [rootNode]
+    visited: set = set()    # hash-set to track visited nodes
+    visited.add(tuple(problem.initialState))    # convert list to hashable tuple
     
     while frontierQueue:
+        print(len(frontierQueue))
         currNode: Node = frontierQueue.pop(0)
         
         # check if current state reached goal state
@@ -31,7 +34,10 @@ def AstarSearch(problem: Problem) -> Node | None:
             newState: list | None = currActions.result(actionName)
             if newState is None: 
                 continue
-            
+            # skip already visited node
+            if tuple(newState) in visited: 
+                continue
+            visited.add(tuple(newState))
             # compute new node data
             frontierQueue.append(Node(newState, currNode, actionName, problem.getPathCost() + currNode.pathCost))
             # Analytics.incrementRecord(problem.h.__name__, "nodesExpanded")
