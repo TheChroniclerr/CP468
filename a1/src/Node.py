@@ -13,15 +13,17 @@ class Node:
         self.action = action
         self.pathCost = pathCost    # g(n)
     
-    def getSuccessors(self) -> list:
-        """Successor Function - Retrieves all current node's direct successors.
+    def __str__(self) -> str:
+        return f"Node(state={self.state}, action={self.action}, pathCost={self.pathCost})"
+    
+    def getAncestors(self) -> list:
+        """Retrieves all direct ancestors of current node.
 
         Returns:
-            list: A list of successors ordered from ancestor to descendant.
+            list: A list of direct ancestors ordered from ancestors to descendants.
         """
-        successors: list = [self]
+        ancestors: list = [self]
+        while ancestors[-1].parent:
+            ancestors.append(ancestors[-1].parent)
         
-        while(successors[0].parent):
-            successors.insert(0, successors[0].parent)
-
-        return successors
+        return ancestors[::-1]  # slice notation - reverse list

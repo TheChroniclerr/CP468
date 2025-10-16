@@ -92,6 +92,7 @@ def _createIndexMap(s: list) -> list:
     indexMap: list = [None] * (len(s) + 1)      # index position 0 is not used, since tile number starts on 1
     
     for goalPos, tileNumb in enumerate(s):
+        if tileNumb is None: continue
         indexMap[tileNumb] = goalPos            # goalPos start at 0
     
     return indexMap
