@@ -16,6 +16,9 @@ class Node:
     def __str__(self) -> str:
         return f"Node(state={self.state}, action={self.action}, pathCost={self.pathCost})"
     
+    def __lt__(self, other):
+        return self.pathCost < other.pathCost
+    
     def getAncestors(self) -> list:
         """Retrieves all direct ancestors of current node.
 
