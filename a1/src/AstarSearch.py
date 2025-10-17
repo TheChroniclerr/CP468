@@ -1,10 +1,11 @@
 # import Analytics
+import time
 import heapq
 import Problem
 from Node import Node
 from Actions import Actions     # type hint
 
-def AstarSearch(problem: Problem) -> Node | None:
+def AstarSearch(problem: Problem) -> int | Node | None:
     """Using A* search algorithm to solve the problem instances as graphs.
 
     Args:
@@ -20,8 +21,17 @@ def AstarSearch(problem: Problem) -> Node | None:
     visited: set = set()    # hash-set to track visited nodes
     visited.add(tuple(problem.initialState))    # convert list to hashable tuple
     
+    
+    start = time.time()
+    count = 0
     while frontierHeap:
         _, currNode = heapq.heappop(frontierHeap)
+        
+        if time.time() - start >= 10:
+            return count
+        
+        print(count)
+        count += 1
         
         # check if current state reached goal state
         if problem.reachGoal(currNode.state):
