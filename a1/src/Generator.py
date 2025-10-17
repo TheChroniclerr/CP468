@@ -2,8 +2,14 @@ import random
 
 blank = None
 
-
 def isSolvable(state, n):
+    """isSolvable - Determines whether a given n x n puzzle can be solved.
+    Args:
+        state (list): Represents contents of the puzzle. One space will be blank.
+        n (int): Represent an n x n puzzle.
+    Returns:
+        bool: True if solvable, false otherwise.
+    """
     a = [x for x in state if x != blank]
     inversions = 0
 
@@ -23,6 +29,13 @@ def isSolvable(state, n):
 
 
 def allMoves(state, n):
+    """allMoves - Contains all possible movements for puzzle pieces. The pieces can be shifted up, down, left and right.
+    Args:
+        state (list): Represents contents of the puzzle. One space will be blank.
+        n (int): Represent an n x n puzzle.
+    Returns:
+        list: List of moves made.
+    """
     blank_i = state.index(None)
     r, c = divmod(blank_i, n)
     moves = []
@@ -40,6 +53,13 @@ def allMoves(state, n):
 
 
 def doMove(state, move):
+    """doMove - Executes a move and updates the state of the puzzle.
+    Args:
+        state (list): Represents contents of the puzzle. One space will be blank.
+        move (int): Move to perform on puzzle.
+    Returns:
+        list: List of moves made.
+    """
     new_state = state.copy()
     blank_i = new_state.index(None)
     target_index = blank_i + move
