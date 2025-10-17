@@ -16,6 +16,11 @@ CSV_HEADER: list = [
 
 class Analytics:
     def __init__(self, problem: Problem):
+        """Analytics constructor
+        
+        Args:
+            problem (Problem): The type of puzzle being handled.
+        """
         self.initialState: str = str(problem.initialState)
         # self.filePointer  # points to location in CSV
         self.fileDir: str = DEFAULT_DIR + FILENAMES[len(problem.initialState)]
@@ -26,16 +31,25 @@ class Analytics:
         }
     
     def recordSteps(self, steps: int) -> None:
+        """Records the number of steps taken to solve the problem.
+        
+        Args:
+            steps (int): The number of steps.
+        """
         for key in self.changes:
             if "steps" in key:
                 self.changes[key] = steps
 
     def incrementNodesExpanded(self) -> None:
+        """Updates the expanded count.
+        """
         for key in self.changes:
             if "expanded" in key:
                 self.changes[key] += 1
     
     def writeCSV(self) -> None:
+        """Write changes made to CSV files.
+        """
         # find record if already exists
         record = None
         for row in self.data:
@@ -54,6 +68,11 @@ class Analytics:
         self._overwrite()
         
     def _newRecord(self) -> dict:
+        """Creates a new record with the initial state defined; by default, heuristic columns are set to "TIMEOUT" 
+
+        Returns:
+            dict: The newly created record with initial state and heuristic columns.
+        """
         record: dict = {
             "initial_state": self.initialState
         }
@@ -64,6 +83,11 @@ class Analytics:
         return record
     
     def _loadExistingCSV(self) -> list:
+        """Loads a pre-existing CSV file.
+
+        Returns:
+            List: Contents of the CSV file
+        """
         if not os.path.exists(self.fileDir):
             with open(self.fileDir, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=CSV_HEADER)
@@ -75,6 +99,8 @@ class Analytics:
             return list(reader)
     
     def _overwrite(self) -> None:
+        """Overwrites the contents of the CSV file.
+        """
         with open(self.fileDir, 'w', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=CSV_HEADER)
             writer.writeheader()

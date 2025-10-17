@@ -25,7 +25,7 @@ def AstarSearch(problem: Problem) -> Node | None:
         
         # check if current state reached goal state
         if problem.reachGoal(currNode.state):
-            analytics.recordSteps(len(Node.getAncestors(currNode)))
+            analytics.recordSteps(currNode.pathCost)
             analytics.writeCSV()
             return currNode
         

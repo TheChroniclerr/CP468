@@ -3,10 +3,12 @@ import random
 blank = None
 
 def isSolvable(state, n):
-    """isSolvable - Determines whether a given n x n puzzle can be solved.
+    """Determines whether a given n x n puzzle can be solved.
+    
     Args:
         state (list): Represents contents of the puzzle. One space will be blank.
         n (int): Represent an n x n puzzle.
+    
     Returns:
         bool: True if solvable, false otherwise.
     """
@@ -29,10 +31,12 @@ def isSolvable(state, n):
 
 
 def allMoves(state, n):
-    """allMoves - Contains all possible movements for puzzle pieces. The pieces can be shifted up, down, left and right.
+    """Contains all possible movements for puzzle pieces. The pieces can be shifted up, down, left and right.
+    
     Args:
         state (list): Represents contents of the puzzle. One space will be blank.
         n (int): Represent an n x n puzzle.
+    
     Returns:
         list: List of moves made.
     """
@@ -53,10 +57,12 @@ def allMoves(state, n):
 
 
 def doMove(state, move):
-    """doMove - Executes a move and updates the state of the puzzle.
+    """Executes a move and updates the state of the puzzle.
+    
     Args:
         state (list): Represents contents of the puzzle. One space will be blank.
         move (int): Move to perform on puzzle.
+    
     Returns:
         list: List of moves made.
     """
@@ -92,32 +98,3 @@ def generateRandom(n: int, min: int, max: int) -> list:
         state = doMove(state, move)
 
     return state
-
-
-# #testing
-# n=3
-# min=20
-# max=40
-# state = [i for i in range(1, n*n)] + [blank]
-# print("3x3:",isSolvable(state,n))
-# state = [i for i in range(1, 7)] + [8] + [7] + [blank]
-# print("3x3:",isSolvable(state,n))
-# state=generateRandom(n,min,max)
-# print("3x3:",isSolvable(state,n))
-# print(state)
-# n=4
-# state = [i for i in range(1, n*n)] + [blank]
-# print("4x4:",isSolvable(state,n))
-# state = [i for i in range(1, 14)] + [15] + [14] + [blank]
-# print("4x4:",isSolvable(state,n))
-# state=generateRandom(n,min,max)
-# print("4x4:",isSolvable(state,n))
-# print(state)
-# n=5
-# state = [i for i in range(1, n*n)] + [blank]
-# print("5x5:",isSolvable(state,n))
-# state = [i for i in range(1, 23)] + [24] + [23] + [blank]
-# print("5x5:",isSolvable(state,n))
-# state=generateRandom(n,min,max)
-# print("5x5:",isSolvable(state,n))
-# print(state)
