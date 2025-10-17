@@ -30,7 +30,7 @@ if __name__ == "__main__":
     
     # !there can be duplicate generations, double check CSV for 100 unique initial states.
     for i in range(0, GENERATIONS):     # 8-puzzle
-        initialState: list = Generator.generateRandom(3, 70, 70)      # Generate puzzle
+        initialState: list = Generator.generateRandom(3, 69, 70)      # Generate puzzle
         print("ini: " + str(initialState))
         for heuristic in ["h1", "h2", "h3"]:
             problem: Problem = Problem(initialState, _8_PUZZLE_GOAL_STATE, heuristic)
@@ -41,7 +41,7 @@ if __name__ == "__main__":
                 print(heuristic + ": Timeout")
     
     for i in range(0, GENERATIONS):     # 15-puzzle
-        initialState: list = Generator.generateRandom(4, 100, 100)      # Generate puzzle
+        initialState: list = Generator.generateRandom(4, 69, 70)      # Generate puzzle
         print("ini: " + str(initialState))
         for heuristic in ["h1", "h2", "h3"]:
             problem: Problem = Problem(initialState, _15_PUZZLE_GOAL_STATE, heuristic)
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 print(heuristic + ": Timeout")
     
     for i in range(0, GENERATIONS):     # 24-puzzle
-        initialState: list = Generator.generateRandom(5, 70, 70)      # Generate puzzle
+        initialState: list = Generator.generateRandom(5, 69, 70)      # Generate puzzle
         print("ini: " + str(initialState))
         for heuristic in ["h1", "h2", "h3"]:
             problem: Problem = Problem(initialState, _24_PUZZLE_GOAL_STATE, heuristic)
