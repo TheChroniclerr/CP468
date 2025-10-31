@@ -1,5 +1,8 @@
-from CSP import CSP
+from __future__ import annotations
 from Tags import ValueHeuristics, VariableHeuristics, Pruning
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Classes.CSP import CSP
 
 class Problem:
     def __init__(
@@ -22,7 +25,7 @@ class Problem:
         self.varH = varHeuristic
         self.valH = valHeuristic
         self.inference = inference
-        # self.goalState = goalState      # complete consistent assignment
+        # analysis
         self.records: list[CSP] = []    # record of states generated per iteration
         
     # def createRecord(self) -> None:
@@ -73,41 +76,6 @@ class Problem:
             return csp    # no inference to perform
         
         return Pruning.Function[self.inference](csp)
-    
-    # def assign(self, constraints: dict[int, list[int]], s: list, var: int, value: int) -> dict[int, list[int]]:
-    #     """Assigns a value to a variable in the state and updates the constraints accordingly.
-
-    #     Args:
-    #         constraints (dict[int, list[int]]): Current constraints.
-    #         s (list): Current state.
-    #         var (int): Variable index to assign.
-    #         value (int): Value to assign to the variable.
-        
-    #     Returns:
-    #         dict[int, list[int]]: Updated constraints after assignment.
-    #     """
-    #     # Create a deep copy of the constraints to avoid modifying the original
-    #     new_constraints = {k: v.copy() for k, v in constraints.items()}
-        
-    #     # Remove the assigned variable from the constraints of other variables
-    #     for neighbor in new_constraints[var]:
-    #         if value in new_constraints[neighbor]:
-    #             new_constraints[neighbor].remove(value)
-        
-    #     return new_constraints
-    
-
-    # def setAction(self, s: list) -> Actions:
-    #     """Gate function that forces Actions instantiation from Problem instance.
-    #     Create an Actions instance for current state.
-
-    #     Args:
-    #         s (list): Current state.
-
-    #     Returns:
-    #         Actions: Actions instance.
-    #     """
-    #     return Actions(s)
 
     def isConsistent(self, j: int) -> bool:
         """Consistency Check - Determines whether the current assignment is consistent with the constraints.

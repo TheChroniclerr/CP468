@@ -1,5 +1,7 @@
-# import heapq
-from CSP import CSP
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Classes.CSP import CSP
 
 def AC_3(csp: CSP) -> CSP | None:
     """Using AC-3 algorithm to prune search space for CSP via inference.

@@ -1,9 +1,10 @@
-from CSP import CSP
-from Node import Node
-from typing import cast
+from __future__ import annotations
+from Classes.Node import Node
 from copy import deepcopy
-from Problem import Problem
-from Tags import ValueHeuristics, VariableHeuristics, Pruning
+from typing import TYPE_CHECKING, cast
+if TYPE_CHECKING:
+    from Classes.CSP import CSP
+    from Classes.Problem import Problem
 
 def Backtracking(problem: Problem) -> CSP | None:
     """Backtracking Search algorithm for CSP.
@@ -35,6 +36,7 @@ def Backtracking(problem: Problem) -> CSP | None:
     
     while stack:
         currNode: Node = stack.pop()
+        index: int      # variable index to assign next value to 
         
         # assign a new variable, add to problem.csp
         newCSP: CSP = deepcopy(currNode.state)
@@ -50,10 +52,7 @@ def Backtracking(problem: Problem) -> CSP | None:
                 return result    # solution found
             
             # find next index to assign value to
-            index: int = cast(int, problem.findVars(mode=1))   # type hinting
-            
-            # add new Nodes to stack based on updated inference
-            valueLis: list[int] = ValueHeuristics.Function[problem.valH](problem.csp, index)
+            index = cast(int, problem.findVars(mode=1))   # type hinting
         else:
             # check if assignment violate constraints
             if not problem.isConsistent(currNode.action[0]):
@@ -62,12 +61,14 @@ def Backtracking(problem: Problem) -> CSP | None:
                 return newCSP    # solution found
             
             # add new Nodes to stack
-            valueLis: list[int] = ValueHeuristics.Function[problem.valH](problem.csp, indexLis[currIndex])
+            index = indexLis[currIndex]
             currIndex += 1
 
         # shared actions (for both inference and non-inference)
+        valueLis: list[int] = problem.findVals(index)
+        # add new Nodes to stack based on updated inference
         for val in reversed(valueLis):
-                node: Node = Node(problem.csp, [indexLis[0], val], None)      # does not need parent because stack enforces DFS
+                node: Node = Node(problem.csp, [index, val], None)      # does not need parent because stack enforces DFS
                 stack.append(node)
 
     # no solution found from all possible combination of values for unassigned variables

@@ -1,7 +1,10 @@
-from CSP import CSP
-from a2.src.Classes.Pruning import AC_3
-from Problem import Problem
-from Search import Backtracking
+from __future__ import annotations
+from Classes.Pruning import AC_3
+from Classes.Search import Backtracking
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Classes.CSP import CSP
+    from Classes.Problem import Problem
 
 def Solver(problem: Problem) -> CSP | None:
     """Solve the given CSP problem using backtracking search with inference.

@@ -1,6 +1,20 @@
+from __future__ import annotations
 import random
-from CSP import CSP
-from typing import cast
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Classes.CSP import CSP
+    
+
+def _getAllUnassigned(csp: CSP) -> list[int]:
+    """Get a list of all unassigned variable indexes.
+
+    Args:
+        csp (CSP): The CSP instance.
+
+    Returns:
+        list[int]: All unassigned variables.
+    """
+    return [i for i, Xi in csp.X.items() if Xi is None]
 
 # --- Variable Heuristics ---
 # include 2 modes for better time complexity in Backtracking with inference
@@ -21,7 +35,7 @@ def DFS(csp: CSP, mode: int = 0) -> list[int] | int:
     """
     if mode == 1:
         return next(i for i, Xi in csp.X.items() if Xi is None)
-    return [i for i, Xi in csp.X.items() if Xi is None]
+    return _getAllUnassigned(csp)
 
 def RV(csp: CSP, mode: int = 0) -> list[int] | int:
     """Random Variable. No heuristic.
@@ -37,7 +51,7 @@ def RV(csp: CSP, mode: int = 0) -> list[int] | int:
             1: return single unassigned variable index (randomly selected).
                 Used by Backtracking search with inference.
     """
-    lis = cast(list[int], DFS(csp))    # type hinting
+    lis = _getAllUnassigned(csp)
     if mode == 1:
         return random.choice(lis)
     random.shuffle(lis)
@@ -59,7 +73,7 @@ def MRV(csp: CSP, mode: int = 0) -> list[int] | int:
             1: return single unassigned variable index (smallest domain size).
                 Used by Backtracking search with inference.
     """
-    lis = cast(list[int], DFS(csp))    # type hinting
+    lis = _getAllUnassigned(csp)
     if mode == 1:
         return min(lis, key=lambda i: len(csp.D[i]))    # O(n)
     return sorted(lis, key=lambda i: len(csp.D[i]))     # O(n log n)
@@ -79,10 +93,10 @@ def LNC(csp: CSP, mode: int = 0) -> list[int] | int:
             1: return single unassigned variable index (most constraints).
                 Used by Backtracking search with inference.
     """
-    lis = cast(list[int], DFS(csp))    # type hinting
+    lis = _getAllUnassigned(csp)
     if mode == 1:
-        return min(lis, key=lambda i: -len(csp.C[i]))    # O(n)
-    return sorted(lis, key=lambda i: -len(csp.C[i]))     # O(n log n)
+        return max(lis, key=lambda i: len(csp.C[i]))    # O(n)
+    return sorted(lis, key=lambda i: -len(csp.C[i]))    # O(n log n)
 
 # --- Value Heuristics ---
 
