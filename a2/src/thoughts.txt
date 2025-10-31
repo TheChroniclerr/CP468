@@ -1,0 +1,108 @@
+ClassicSudoku class takes a list formatted input
+it returns the X, D, and C
+
+X, D, C are passed to CSP class
+it returns a formulated CSP problem instance
+
+CSP problem instance is passed to Solver, along with AC-3, heuristic, and MAC specifications
+it returns a solved state
+
+solved state is passed back to ClassicSudoku class
+it returns a humanly readable solution
+
+Class: ClassicSudoku, CSP, Solver
+* more potential classese for Sudoku variations (4x4, 16x16, 3 3x3, irregular)
+
+---
+
+Other Classes:
+AC-3 (Prune)
+Heuristics (Search)
+    Backtracking (default DFS)
+
+
+
+MAC
+    ForwardCheck
+    ConstraintPropogation (AC-3)
+
+---
+
+Pruning:
+Take the original Node with starting CSP values, add its current variables to action (the variables to perform AC on)
+Clone this Node (without the action), lets call it newNode
+
+Iterate through every action variables from Node, for each variables iterated
+    find its constraint variable in newNode
+    make it AC with current variable by pruning its domain
+    if its domain reaches 1, update newNode variables, add it to action
+*(Action ensures only newly added variables are used for pruning, since old variables were already used for pruning)
+
+if final node is a consistent complete assignment
+    return result
+else
+    send to search algorithm (Backtracking)
+
+---
+
+Data structure:
+X = {
+    i: Xi
+    ...
+}
+
+D = {
+    i: {Xi, Xi, ...all possible values of Xi currently}
+}
+
+C = {
+    i: {j, j, ...all index/variables it must have different VALUES from}
+}
+
+---
+
+Varaible heuristic only changes X, not D, so Node only keep track of X
+Inference change X and D by pruning, so Node must keep track of both X and D
+
+Code:
+
+get variable expansion order by executing variable heuristic function
+get initial root values by executing value heuristic function
+append these values to dfs stack
+
+get root Node
+while stack not empty
+    pop value from stack
+    assign value to X
+    if inference function
+        create new csp with X
+        execute inference function with new csp
+        if no return
+            return None because no solution
+        re-execute variable heuristic function to get variable for updated inference
+        re-execute value heuristic function to get values
+        append values to stack   # reverese input list if necessary to append right value to right place
+    elif no inference function (i.e. only variable and value heuristic functions)
+        if X violate constraints
+            break 
+        else
+            get next variable index in variable expansion order
+            get domain values by re-executing value heuristic function
+            append these values to stack
+
+*Node each Node must save the current state and action it will take to lead to the next state
+Node is not complete without either variables present
+
+---
+
+Todo:
+- Write Solver
+- Debug & Test & Pass 
+- Write Analyst
+- Test with other Sudoku
+
+Other:
+- Calculate time complexity
+- Optimize algorithm
+- Complete report
+- Run on console (for demo)
