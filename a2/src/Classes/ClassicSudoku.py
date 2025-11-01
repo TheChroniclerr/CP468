@@ -62,7 +62,7 @@ class ClassicSudoku:
         return [csp.X[i] for i in range(SIZE)]
     
     @staticmethod
-    def toIndex(self, x: int, y: int) -> int:
+    def toIndex(x: int, y: int) -> int:
         """Convert Sudoku coordinate to index.
         Index starts from 0 at top left to
         80 to bottom right
@@ -77,7 +77,7 @@ class ClassicSudoku:
         return (9 - y) * 9 + (x - 1)
 
     @staticmethod
-    def toCoordinate(self, index: int) -> tuple[int, int]:
+    def toCoordinate(index: int) -> tuple[int, int]:
         """Convert Sudoku index to coordinate.
         Coordinate starts from (1, 1) at bottom left to
         (9, 9) at top right

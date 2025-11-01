@@ -26,7 +26,6 @@ def Backtracking(problem: Problem) -> CSP | None:
     
     # select orderedd list of values from variable domain
     valueLis: list[int] = problem.findVals(currIndex)
-    currIndex += 1
     
     # initialize stack Nodes
     for val in reversed(valueLis):
@@ -61,9 +60,9 @@ def Backtracking(problem: Problem) -> CSP | None:
             if problem.isComplete():
                 return newCSP    # solution found
             
-            # add new Nodes to stack
+            # find next unassigned node with respect to current just assigned node in indexLis (maintain currIndex validity after Backtracking)
+            currIndex = next(i for i, varIndex in enumerate(indexLis) if varIndex == currNode.action[0]) + 1
             index = indexLis[currIndex]
-            currIndex += 1
 
         # shared actions (for both inference and non-inference)
         valueLis: list[int] = problem.findVals(index)
