@@ -1,5 +1,5 @@
 # from Classes import Generator
-import Utilities
+from Classes.Generator import generateGrid
 from Classes.ClassicSudoku import ClassicSudoku
 from Classes.CSP import CSP
 from Classes.Problem import Problem
@@ -30,10 +30,51 @@ if __name__ == "__main__":
         9, 1, 2, 3, 4, 5, 6, 7, None
     ]
     
-    # Backtracking solvable
-    X: list[int | None] = [None] * 81
+    # Pure Backtracking solvable
+    X_empty: list[int | None] = [None] * 81
     
-    unprotectedCsp = ClassicSudoku(X).getCSP()  # Conver from custom list format to CSP
+    # No solution
+    X_non = [
+        1, None, None, None, 2, None, None, 4, None,
+        None, None, 3, None, 8, None, None, None, None,
+        None, 2, None, None, None, None, 1, 6, 8,
+        None, 1, None, None, 5, None, None, 8, 7,
+        None, None, 2, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None, None,
+        None, 1, 8, 3, None, None, None, None, None,
+        None, 2, 1, 9, None, None, None, None, None,
+        None, None, None, None, None, None, None, None, None
+    ]
+
+    # AC-3 & Backtracking solvable
+    X_20 = [
+        None, 6, None, None, None, None, 9, None, None,
+        None, None, None, None, None, None, None, 2, None,
+        None, None, None, 3, 1, 6, None, None, None,
+        None, None, 6, 5, None, 3, None, 7, None,
+        None, 2, None, None, None, None, None, None, None,
+        None, 7, None, None, None, None, 6, 7, 1,
+        None, None, None, None, 9, None, None, None, 5,
+        None, None, None, None, 7, None, None, 4, None,
+        None, None, None, None, None, 3, None, None, None
+    ]
+    
+    X_30 = [
+        None, 6, None, 5, 2, None, 9, None, None,
+        4, None, 3, None, None, None, 7, 2, None,
+        None, 2, None, 9, None, None, None, None, None,
+        None, 1, 4, None, None, 2, None, None, 7,
+        None, 8, None, 3, None, 1, 6, 5, None,
+        None, None, 6, None, 7, None, None, 1, None,
+        None, None, None, 8, None, None, None, 9, None,
+        None, None, None, 2, None, None, None, None, 6,
+        None, None, 9, None, 6, 5, None, None, 1
+    ]
+
+    # Generate Sudoku instance
+    X: list[int | None] = generateGrid(30)
+    
+    unprotectedCsp = ClassicSudoku(X_30).getCSP()  # Conver from custom list format to CSP
     csp: CSP = CSP(*unprotectedCsp)     # CSP does deepcopy
     problem: Problem = Problem(csp)
     result: CSP | None = Solver(problem)
@@ -42,5 +83,7 @@ if __name__ == "__main__":
         format = ClassicSudoku(grid)    # Convert from CSP back to custom list
         print(format)
         print(problem.analytics)
+    if result is None:
+        print("no solution")
     # print(result)
     # print(type(result))
