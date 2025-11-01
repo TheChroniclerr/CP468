@@ -32,7 +32,8 @@ def Backtracking(problem: Problem) -> CSP | None:
     for val in reversed(valueLis):
         # Node with the same parent references the same csp since the states are the same
         node: Node = Node(problem.csp, [indexLis[0], val], None)    # no deepcopy for problem.csp - it is done in while loop
-        stack.append(node)    
+        stack.append(node)
+    problem.analytics.addSLRecord(len(stack))
     
     while stack:
         currNode: Node = stack.pop()
@@ -68,8 +69,9 @@ def Backtracking(problem: Problem) -> CSP | None:
         valueLis: list[int] = problem.findVals(index)
         # add new Nodes to stack based on updated inference
         for val in reversed(valueLis):
-                node: Node = Node(problem.csp, [index, val], None)      # does not need parent because stack enforces DFS
-                stack.append(node)
+            node: Node = Node(problem.csp, [index, val], None)      # does not need parent because stack enforces DFS
+            stack.append(node)
+        problem.analytics.addSLRecord(len(stack))    
 
     # no solution found from all possible combination of values for unassigned variables
     return None

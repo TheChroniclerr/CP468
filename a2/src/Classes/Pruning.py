@@ -1,9 +1,10 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
+    from Analytics import Analytics
     from Classes.CSP import CSP
 
-def AC_3(csp: CSP) -> CSP | None:
+def AC_3(csp: CSP, analytics: Analytics) -> CSP | None:
     """Using AC-3 algorithm to prune search space for CSP via inference.
     Does not guarantee solution, requires backtracking search afterwards.
 
@@ -19,13 +20,14 @@ def AC_3(csp: CSP) -> CSP | None:
     for i, Xi in csp.X.items():
         if Xi is not None:
             queue.append(i)
+    analytics.addQLRecord(len(queue))
     
     while queue:
         newAssigned: list[int] | None = ForwardChecking(csp, queue.pop(0))
         if newAssigned is None:
             return None    # no solution possible
         queue.extend(newAssigned)
-        # TODO: track each iteration/cycle for analytics
+        analytics.addQLRecord(len(queue))
     
     return csp
 

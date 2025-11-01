@@ -48,6 +48,49 @@ class ClassicSudoku:
         self.X = self._getVariables()
         self.D = self._getDomains()
         self.C = self._getConstraints()
+    
+    @staticmethod
+    def toGrid(csp: CSP) -> list[int | None]:
+        """Takes a CSP instance, convert to formmated list grid.
+
+        Args:
+            csp (CSP): The CSP instance.
+
+        Returns:
+            list[int | None]: The grid.
+        """
+        return [csp.X[i] for i in range(SIZE)]
+    
+    @staticmethod
+    def toIndex(self, x: int, y: int) -> int:
+        """Convert Sudoku coordinate to index.
+        Index starts from 0 at top left to
+        80 to bottom right
+
+        Args:
+            x (int): _description_
+            y (int): _description_
+
+        Returns:
+            int: _description_
+        """
+        return (9 - y) * 9 + (x - 1)
+
+    @staticmethod
+    def toCoordinate(self, index: int) -> tuple[int, int]:
+        """Convert Sudoku index to coordinate.
+        Coordinate starts from (1, 1) at bottom left to
+        (9, 9) at top right
+
+        Args:
+            index (int): Sudoku index
+
+        Returns:
+            tuple[int, int]: Sudoku coordinate
+        """
+        x = (index % 9) + 1
+        y = 9 - (index // 9)
+        return (x, y)
 
     def _isValid(self, grid: list[int | None]) -> None:
         """Check whether input grid is valid.
@@ -139,43 +182,3 @@ class ClassicSudoku:
             if i in [2, 5]:
                 result += "------+-------+------\n"
         return result
-    
-    def toGrid(self, csp: CSP) -> list[int | None]:
-        """Takes a CSP instance, convert to formmated list grid.
-
-        Args:
-            csp (CSP): The CSP instance.
-
-        Returns:
-            list[int | None]: The grid.
-        """
-        return [csp.X[i] for i in range(SIZE)]
-    
-    def toIndex(self, x: int, y: int) -> int:
-        """Convert Sudoku coordinate to index.
-        Index starts from 0 at top left to
-        80 to bottom right
-
-        Args:
-            x (int): _description_
-            y (int): _description_
-
-        Returns:
-            int: _description_
-        """
-        return (9 - y) * 9 + (x - 1)
-
-    def toCoordinate(self, index: int) -> tuple[int, int]:
-        """Convert Sudoku index to coordinate.
-        Coordinate starts from (1, 1) at bottom left to
-        (9, 9) at top right
-
-        Args:
-            index (int): Sudoku index
-
-        Returns:
-            tuple[int, int]: Sudoku coordinate
-        """
-        x = (index % 9) + 1
-        y = 9 - (index // 9)
-        return (x, y)

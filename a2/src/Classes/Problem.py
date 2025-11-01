@@ -1,4 +1,5 @@
 from __future__ import annotations
+from Classes.Analytics import Analytics
 from Tags import ValueHeuristics, VariableHeuristics, Pruning
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -26,14 +27,7 @@ class Problem:
         self.valH = valHeuristic
         self.inference = inference
         # analysis
-        self.records: list[CSP] = []    # record of states generated per iteration
-        
-    # def createRecord(self) -> None:
-    #     """Create a record of the current CSP state.
-    #     Used for analytics.
-    #     """
-    #     self.records.append(Node(self.X, self.D, None))
-    #     return
+        self.analytics = Analytics()
 
     def findVars(self, mode: int = 0) -> list[int] | int:
         """Gate function that forces Heuristics function to be called in Problem instance.
