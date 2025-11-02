@@ -4,13 +4,13 @@ N = 9
 
 def idx_to_rc(idx):
     """
-    index to row and coloum
+    index to row and column
     """
     return idx // N, idx % N
 
 def rc_to_idx(r, c):
     """
-    row and coloum to index
+    row and column to index
     """
     return r * N + c
 
@@ -36,7 +36,7 @@ CONFLICTS = [conflict_indices(i) for i in range(N*N)]
 
 def generate():
     """
-    uses indices asa  way to randomly add each value while picking the the most legal option to add while doing so
+    uses indices as a way to randomly add each value while picking the most legal option to add while doing so
     """
     grid = [None]*(N*N)
     used_indices = set()
