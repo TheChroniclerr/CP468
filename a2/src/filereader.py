@@ -24,4 +24,3 @@ def write_sudoku_csv(path, grid):
         w = csv.writer(f)
         for r in range(0, 81, 9):
             w.writerow([(grid[r+c] if grid[r+c] is not None else 0) for c in range(9)])
-# beans
