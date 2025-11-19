@@ -1,5 +1,6 @@
 from __future__ import annotations
 from Classes.Analytics import Analytics
+from Classes.ClassicSudoku import ClassicSudoku
 from Tags import ValueHeuristics, VariableHeuristics, Pruning
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -56,12 +57,13 @@ class Problem:
         """
         return ValueHeuristics.Function[self.valH](self.csp, i)
     
-    def infer(self, csp: CSP) -> CSP | None:
+    def infer(self, csp: CSP, j: int) -> CSP | None:
         """Gate function that forces Pruning function to be called in Problem instance.
         Perform inference on the given CSP instance.
 
         Args:
             csp (CSP): The CSP instance. (modified in place)
+            j (int): The variable index that has been assigned a value.
         
         Returns:
             CSP | None: The pruned CSP instance or None if no solution possible.
@@ -69,7 +71,7 @@ class Problem:
         if self.inference is None:
             return csp    # no inference to perform
         
-        return Pruning.Function[self.inference](csp)
+        return Pruning.Function[self.inference](csp, j)
 
     def isConsistent(self, j: int) -> bool:
         """Consistency Check - Determines whether the current assignment is consistent with the constraints.
@@ -82,6 +84,7 @@ class Problem:
             bool: True if the assignment is consistent, else False.
         """
         Xj: int | None = self.csp.X[j]
+        print(ClassicSudoku([self.csp.X[i] for i in range(81)]))
         for i in self.csp.C[j]:
             Xi = self.csp.X[i]
             if Xi is not None and Xi == Xj:

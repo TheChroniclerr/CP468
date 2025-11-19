@@ -40,7 +40,7 @@ def ConstraintPropogation(csp: CSP, j: int) -> CSP | None:
 
     Args:
         csp (CSP): The CSP instance. (modified in place)
-        j (int): The starting variable index.
+        j (int): The variable index that has been assigned a value.
 
     Returns:
         CSP | None: The pruned CSP instance or None if no solution possible.
