@@ -3,29 +3,29 @@ from typing import Callable
 from Individual import individual
 
 MAX_POP = 10        # max population size
-MAX_STRING = 7      # max string length
+MAX_STRING = 20      # max string length
 
 PROBABILITY_MUTATION = 0.05
 PROBABILITY_CROSS = 1
 
-def select(records: list[individual], sumfitness: int) -> individual:
+def select(records: list[individual], sumfitness: float) -> individual:
     """Select a single individual via roulette wheel selection.
     Weighted random selection with replacement.
 
     Args:
         records (list[individual]): Records of population with fitness data.
-        sumfitness (int): Total fitness score of population in current generation.
+        sumfitness (float): Total fitness score of population in current generation.
 
     Returns:
         individual: Selected individual (ref).
     """
-    partsum: int = 0
-    rand: int = int(random.uniform(0, 1) * sumfitness)
+    partsum: float = 0
+    rand: float = random.uniform(0, sumfitness)
     
-    for individual in records:
-        partsum += individual["fitness"]
+    for ind in records:
+        partsum += ind["fitness"]
         if partsum >= rand:
-            return individual
+            return ind
     return records[-1]
 
 def crossover(parent1: str, parent2: str, pcross: float) -> tuple[str, str]:
@@ -43,10 +43,11 @@ def crossover(parent1: str, parent2: str, pcross: float) -> tuple[str, str]:
         # No cross
         return parent1, parent2
     
+    # TODO: string length of 1?
     site: int = random.randint(1, len(str(parent1)) - 1)    # cross site
     
-    child1: str = parent1[0:site-1] + parent2[site:-1]
-    child2: str = parent2[0:site-1] + parent1[site:-1]
+    child1 = parent1[:site] + parent2[site:]
+    child2 = parent2[:site] + parent1[site:]
     return child1, child2 
 
 def mutate(chrom: str, pmutation: float) -> tuple[str, int]:
@@ -73,12 +74,13 @@ def mutate(chrom: str, pmutation: float) -> tuple[str, int]:
             nchrom += allele
     return nchrom, mutations
 
-def newGeneration(records: list[individual], sumfitness: int, pcross: float, pmutation: float) -> list[str]:
+def newGeneration(records: list[individual], sumfitness: float, pcross: float, pmutation: float) -> list[str]:
     """Create new generation through select, crossover, and mutation.
+    Note: Generation assume an even-numbered popsize; odd-numbered popsize gets rounded down (popsize -= 1).
 
     Args:
         records (list[individual]): Records of population with fitness data.
-        sumfitness (int): Total fitness score of population in current generation.
+        sumfitness (float): Total fitness score of population in current generation.
         pcross (float): Probability of cross occuring.
         pmutation (float): Probability of mutation.
 
@@ -89,9 +91,9 @@ def newGeneration(records: list[individual], sumfitness: int, pcross: float, pmu
     mate1: str              # first mate in pair
     mate2: str              # second mate in pair
     
-    for _ in range(len(records)):
+    for _ in range(len(records) // 2):
         # --- Reproduction ---
-        mate1 = select(records, sumfitness)["chrom"]    # TODO: mate1 and mate2 the same?
+        mate1 = select(records, sumfitness)["chrom"]    # Note: mate1 and mate2 can be the same
         mate2 = select(records, sumfitness)["chrom"]
         # --- Crossover ---
         child1, child2 = crossover(mate1, mate2, pcross)
@@ -102,8 +104,9 @@ def newGeneration(records: list[individual], sumfitness: int, pcross: float, pmu
         npop.extend([child1, child2])
     return npop
 
-def decode(chrom: str) -> int:
-    """Decode string as unsigned binary integer.
+def decode_2d(chrom: str) -> tuple[int, int]:
+    """Decode string as two unsigned binary integers.
+    Used to substitute x and y in objective functions.
 
     Args:
         chrom (str): Chromosome as str
@@ -111,24 +114,23 @@ def decode(chrom: str) -> int:
     Returns:
         int: Chromosome as normal int, interpreted as binary bit (e.g. '101' -> 5). 
     """
-    bchrom: int = 0
-    
-    for i, allele in enumerate(chrom):
-        bchrom += 2 ** i if allele == "1" else 0
-    return bchrom
+    mid: int = len(chrom) // 2
+    return int(chrom[:mid], 2), int(chrom[mid:], 2)
 
-def getFitness(objfunc: Callable, chrom: str) -> int:
+def getFitness(objfunc: Callable, chrom: str) -> float:
     """Fitness function to get fitness score of chromosome.
+    Note: Grants higher fitness for minima, not maxima. 
 
     Args:
         objfunc (Callable): Objective function.
         chrom (str): Chromosome.
 
     Returns:
-        int: Fitness score.
+        float: Fitness score.
     """
-    bchrome: int = decode(chrom)
-    return objfunc(bchrome)
+    chrom1, chrom2 = decode_2d(chrom)
+    # Sample space for fitness = [0, 1]. Prevent div-by-0 error.
+    return 1 / (1 + objfunc(chrom1, chrom2))
 
 def getRecords(objfunc: Callable, pop: list[str]) -> list[individual]:
     """Get rocords of population from curren generation.
@@ -144,15 +146,17 @@ def getRecords(objfunc: Callable, pop: list[str]) -> list[individual]:
     records: list[individual] = []
     
     for chrom in pop:
+        x, y = decode_2d(chrom)
         ind: individual = {
             "chrom": chrom,
-            "x": decode(chrom),
+            "x": x,
+            "y": y,
             "fitness": getFitness(objfunc, chrom)
         }
         records.append(ind)
     return records
 
-def getStatistics(records: list[individual]) -> tuple[individual, individual, int, int]:
+def getStatistics(records: list[individual]) -> tuple[individual, individual, float, float]:
     """Calculate population statistics - max, min, avg, sum.
 
     Args:
@@ -167,8 +171,8 @@ def getStatistics(records: list[individual]) -> tuple[individual, individual, in
     """
     fmax: individual = max(records, key=lambda ind: ind["fitness"])
     fmin: individual = min(records, key=lambda ind: ind["fitness"])
-    sumfitness: int = sum(ind["fitness"] for ind in records)
-    avg: int = int(sumfitness / len(records))
+    sumfitness: float = sum(ind["fitness"] for ind in records)
+    avg: float = sumfitness / len(records)
     return fmax, fmin, avg, sumfitness
 
 def generate(maxpop: int, maxstr: int) -> list[str]:
@@ -206,4 +210,9 @@ if __name__ == "__main__":
     pop: list[str] = generate(MAX_POP, MAX_STRING)
     records: list[individual] = getRecords(DeJongSphere, pop)
     fmax, fmin, avg, sumfitness = getStatistics(records)
+    print(fmax["fitness"], fmin["fitness"], avg, sumfitness)
+    
     newpop: list[str] = newGeneration(records, sumfitness, PROBABILITY_CROSS, PROBABILITY_MUTATION)
+    records: list[individual] = getRecords(DeJongSphere, newpop)
+    fmax, fmin, avg, sumfitness = getStatistics(records)
+    print(fmax["fitness"], fmin["fitness"], avg, sumfitness)
