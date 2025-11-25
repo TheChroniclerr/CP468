@@ -1,11 +1,11 @@
-import time
-import threading
+# import time
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import index
 
 def f(x, y):
-    return np.sin(x**2 + y**2)
+    return x**2 + y**2
 
 x = np.linspace(-5, 5, 400)
 y = np.linspace(-5, 5, 400)
@@ -32,7 +32,7 @@ def update(_):
     return scat,
 
 # Animate every 5000 ms (5 seconds)
-ani = FuncAnimation(fig, update, interval=5000)
+ani = FuncAnimation(fig, update, interval=100)  # refresh every 0.1 second
 
 plt.show()
 

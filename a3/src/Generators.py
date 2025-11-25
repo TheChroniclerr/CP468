@@ -1,5 +1,6 @@
 import random
 from typing import Callable
+from index import index
 from Utilities import toPop
 from dt.individual import individual
 

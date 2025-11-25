@@ -1,4 +1,6 @@
 from typing import Callable
+import index
+import time
 from dt.individual import individual
 
 def decode_2d(chrom: str) -> tuple[int, int]:
@@ -41,6 +43,7 @@ def toPop(objfunc: Callable, lstr: list[str]) -> list[individual]:
         list[individual]: Records of individuals. (cpy)
     """
     pop: list[individual] = []
+    index.index["pop"] = pop
 
     for chrom in lstr:
         x, y = decode_2d(chrom)
@@ -51,4 +54,5 @@ def toPop(objfunc: Callable, lstr: list[str]) -> list[individual]:
             "fitness": getFitness(objfunc, chrom)
         }
         pop.append(ind)
+        time.sleep(0.3)
     return pop
