@@ -1,7 +1,7 @@
 # TODO LIST
 
 - [x] Implement SGA
-- [ ] Separate modules
+- [x] Separate modules
 - [ ] Global/dynamic reimplementation
 - [ ] UI control
 - [ ] Stats

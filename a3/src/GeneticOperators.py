@@ -1,12 +1,12 @@
 import random
-from Individual import individual
+from dt.individual import individual
 
-def select(records: list[individual], sumfitness: float) -> individual:
+def select(pop: list[individual], sumfitness: float) -> individual:
     """Select a single individual via roulette wheel selection.
     Weighted random selection with replacement.
 
     Args:
-        records (list[individual]): Records of population with fitness data.
+        pop (list[individual]): Records of population with fitness data.
         sumfitness (float): Total fitness score of population in current generation.
 
     Returns:
@@ -15,11 +15,11 @@ def select(records: list[individual], sumfitness: float) -> individual:
     partsum: float = 0
     rand: float = random.uniform(0, sumfitness)
     
-    for ind in records:
+    for ind in pop:
         partsum += ind["fitness"]
         if partsum >= rand:
             return ind
-    return records[-1]
+    return pop[-1]
 
 def crossover(parent1: str, parent2: str, pcross: float) -> tuple[str, str]:
     """Cross two parent strings, place in two child strings.
@@ -30,7 +30,7 @@ def crossover(parent1: str, parent2: str, pcross: float) -> tuple[str, str]:
         pcross (float): Probability of cross occuring.
 
     Returns:
-        tuple[str, str]: Two child strings (cpy).
+        tuple[str, str]: Two child strings. (cpy)
     """
     if random.uniform(0, 1) > pcross:
         # No cross
@@ -52,7 +52,7 @@ def mutate(chrom: str, pmutation: float) -> tuple[str, int]:
         pmutation (float): Probability of mutation.
 
     Returns:
-        tuple[str, int]: The mutated allele, and the number of mutations happened (cpy).
+        tuple[str, int]: The mutated allele, and the number of mutations happened. (cpy)
     """
     nchrom: str = ""        # new string after mutation
     mutations: int = 0      # mutations counter    
