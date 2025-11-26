@@ -31,13 +31,15 @@ def main() -> None:
 
 if __name__ == "__main__":
     # --- Global Variables ---
-    index.index["objfunc"] = OBJECTIVE_FUNCTION
     index.index["pop"] = []
     index.index["lock"] = threading.Event()
     
     # --- Generation ---
+    bounds = [-(2 ** (MAX_STRING // 2 - 1)), 2 ** (MAX_STRING // 2 - 1) - 1]
+    objfunc = DeJongSphere
+    
     t = threading.Thread(target=main, daemon=True)
     t.start()
     
     # --- Visualization ---
-    visualize()
+    visualize(bounds, objfunc)

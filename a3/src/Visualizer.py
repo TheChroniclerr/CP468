@@ -1,15 +1,16 @@
+from typing import Callable
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import index
 
-def visualize() -> None:
+def visualize(bounds: list, objfunc: Callable) -> None:
     """Visualize SGA.
     """
-    x = np.linspace(-1000, 1000, 400)
-    y = np.linspace(-1000, 1000, 400)
+    x = np.linspace(bounds[0], bounds[1], 400)
+    y = np.linspace(bounds[0], bounds[1], 400)
     X, Y = np.meshgrid(x, y)
-    Z = index.index["objfunc"](X, Y)
+    Z = objfunc(X, Y)
 
     fig, ax = plt.subplots()
 
