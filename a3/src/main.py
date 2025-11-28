@@ -7,27 +7,28 @@ from Generation import newGeneration, nextGeneration
 from dt.individual import individual
 from dt.generation import generation
 
-MAX_POP = 40        # max population size
-MAX_STRING = 20     # max string length
+MAX_POP = 80        # max population size
+MAX_STRING = 80     # max string length (EVEN NUMBERS RECOMMENDED)
 
 PROBABILITY_MUTATION = 0.05
 PROBABILITY_CROSS = 1
 
-OBJECTIVE_FUNCTION = DeJongSphere
+BUFFER = 0.01        # Rate to load points in seconds/point
+BOUNDS = (-10.0, 10.0)
+OBJECTIVE_FUNCTION = RosenbrockValley
 
-BUFFER = 0.05        # Rate to load points in seconds/point
 
 def main() -> None:
     # wait for visualizer initiation
     index.index["lock"].wait()
     
     # Code    
-    pop: list[individual] = generateRand(MAX_POP, MAX_STRING, OBJECTIVE_FUNCTION)
+    pop: list[individual] = generateRand(MAX_POP, MAX_STRING, OBJECTIVE_FUNCTION, BOUNDS)
     gen: generation = newGeneration(pop)    # pop in-place ref
     print(gen["statistics"]["min"]["fitness"], gen["statistics"]["max"]["fitness"], gen["statistics"]["avg"], gen["statistics"]["sum"])
     
     while True:
-        newgen: generation = nextGeneration(gen["population"], gen["statistics"]["sum"], OBJECTIVE_FUNCTION, PROBABILITY_CROSS, PROBABILITY_MUTATION)
+        newgen: generation = nextGeneration(gen["population"], gen["statistics"]["sum"], OBJECTIVE_FUNCTION, BOUNDS, PROBABILITY_CROSS, PROBABILITY_MUTATION)
         # print(newgen["statistics"]["min"]["fitness"], newgen["statistics"]["max"]["fitness"], newgen["statistics"]["avg"], newgen["statistics"]["sum"])
         print(newgen["statistics"]["sum"])
         newgen: generation = gen
@@ -39,11 +40,8 @@ if __name__ == "__main__":
     index.index["lock"] = threading.Event()
     
     # --- Generation ---
-    bounds = [-(2 ** (MAX_STRING // 2 - 1)), 2 ** (MAX_STRING // 2 - 1) - 1]
-    objfunc = OBJECTIVE_FUNCTION
-    
     t = threading.Thread(target=main, daemon=True)
     t.start()
     
     # --- Visualization ---
-    visualize(bounds, objfunc)
+    visualize(BOUNDS, OBJECTIVE_FUNCTION)

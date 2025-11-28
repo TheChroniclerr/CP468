@@ -39,7 +39,7 @@ def RosenbrockValley(x: float, y: float) -> float:
         float: Objective value (i.e. fitness score).
     """
     a: float = 1
-    b: float = 100
+    b: float = 1
     return (a - x)**2 + b * (y - x**2)**2
 
 def HimmelblauFunction(x: float, y: float) -> float:

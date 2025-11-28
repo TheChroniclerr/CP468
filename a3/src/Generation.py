@@ -23,13 +23,15 @@ def newGeneration(pop: list[individual]) -> generation:
     }
     return gen
 
-def nextGeneration(pop: list[individual], sumfitness: float, objfunc: Callable, pcross: float, pmutation: float) -> generation:
+def nextGeneration(pop: list[individual], sumfitness: float, objfunc: Callable, bounds: tuple[float, float], pcross: float, pmutation: float) -> generation:
     """Create new generation through select, crossover, and mutation.
     Note: Generation assume an even-numbered popsize; odd-numbered popsize gets rounded down (popsize -= 1).
 
     Args:
         pop (list[individual]): Records of population with fitness data.
         sumfitness (float): Total fitness score of population in current generation.
+        objfunc (Callable): Objective function.
+        bounds (tuple[float, float]): Length of bounding square.
         pcross (float): Probability of cross occuring.
         pmutation (float): Probability of mutation.
 
@@ -52,5 +54,5 @@ def nextGeneration(pop: list[individual], sumfitness: float, objfunc: Callable, 
         # --- New Gen ---
         nstr.extend([child1, child2])
         
-    npop: list[individual] = toPop(objfunc, nstr)
+    npop: list[individual] = toPop(objfunc, nstr, bounds)
     return newGeneration(npop)

@@ -4,16 +4,21 @@
 - [x] Separate modules
 - [x] Global/dynamic reimplementation
 - [ ] UI control
-- [ ] Visualizaton (for other objfuncs) 
-  - [ ] graph fix
-  - [ ] point fix
+- [x] Visualizaton (for other objfuncs) 
+  - [x] logarithmatice heatmap
+  - [x] point fix
+- [ ] Allow setting initial population range 
 - [ ] Stats
   - [ ] Stats display
   - [ ] Stats saving
 
 # Features
-- [x] 2's Complement
-- [ ] Resolution tuning (objfunc)
+
+- [x] 2's Complement (Deprecated)
+- [x] Resolution tuning (objfunc)
+- Visualization
+  - [x] contour lines
+  - [x] logarithmatic contour lines
 - [ ] Fitness score adjust
 - [ ] Reproduction implementation
 

@@ -35,29 +35,53 @@ def decode_2d_signed(chrom: str) -> tuple[int, int]:
         return value
     return twos_complement(chrom[:mid]), twos_complement(chrom[mid:])
 
-def getFitness(objfunc: Callable, chrom: str) -> float:
+def decode_2d_sclaed(chrom: str, bounds: tuple[float, float]) -> tuple[float, float]:
+    """Decode string into a normalized scale between [0, 1],
+    then apply that scale to the square bounds.
+    
+    Args:
+        chrom (str): Chromosome as str
+        bounds (tuple[float, float]): Bounding square length.
+
+    Returns:
+        tuple[float, float]: Chromosomes scaled to the bounding square.
+    """
+    mid = len(chrom) // 2
+    
+    # Normalize
+    units: int = 2**mid - 1       # max representations of one chromosome - 1
+    xnorm: float = int(chrom[:mid], 2) / units    # normalize to [-1,1]
+    ynorm: float = int(chrom[mid:], 2) / units
+    
+    # Coodinates in bound
+    lbound: float = bounds[1] - bounds[0]       # Length of bounds of data range square
+    return (bounds[0] + xnorm * lbound, 
+            bounds[0] + ynorm * lbound)
+
+def getFitness(objfunc: Callable, chrom1: float, chrom2: float) -> float:
     """Fitness function to get fitness score of chromosome.
     Note: Grants higher fitness for minima, not maxima. 
 
     Args:
         objfunc (Callable): Objective function.
-        chrom (str): Chromosome.
+        chrom1 (str): Chromosome one.
+        chrom2 (str): Chromosome two.
 
     Returns:
         float: Fitness score.
     """
-    chrom1, chrom2 = decode_2d_signed(chrom)
     # Sample space for fitness = [0, 1]. Prevent div-by-0 error.
     return 1 / (1 + objfunc(chrom1, chrom2))
     # return objfunc(chrom1, chrom2)
 
-def toPop(objfunc: Callable, lstr: list[str]) -> list[individual]:
+def toPop(objfunc: Callable, lstr: list[str], bounds: tuple[float, float]) -> list[individual]:
     """Get rocords of population from curren generation.
     Individual consist of a record of its string, decoded value, and fitness score.
 
     Args:
         objfunc (Callable): Objective function.
         lstr (list[str]): Population.
+        bounds (tuple[float, float]): Bounding square length.
 
     Returns:
         list[individual]: Records of individuals. (cpy)
@@ -66,12 +90,12 @@ def toPop(objfunc: Callable, lstr: list[str]) -> list[individual]:
     index.index["pop"] = pop
 
     for chrom in lstr:
-        x, y = decode_2d_signed(chrom)
+        x, y = decode_2d_sclaed(chrom, bounds)
         ind: individual = {
             "chrom": chrom,
             "x": x,
             "y": y,
-            "fitness": getFitness(objfunc, chrom)
+            "fitness": getFitness(objfunc, x, y)
         }
         pop.append(ind)
         time.sleep(index.index["buffer"])
