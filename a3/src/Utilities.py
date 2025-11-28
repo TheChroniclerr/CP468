@@ -1,6 +1,6 @@
+import time
 from typing import Callable
 import index
-import time
 from dt.individual import individual
 
 def decode_2d(chrom: str) -> tuple[int, int]:
@@ -11,7 +11,7 @@ def decode_2d(chrom: str) -> tuple[int, int]:
         chrom (str): Chromosome as str
 
     Returns:
-        int: Chromosome as normal int, interpreted as binary bit (e.g. '101' -> 5).
+        int: Chromosomes as normal int, interpreted as binary bit (e.g. '101' -> 5).
     """
     mid: int = len(chrom) // 2
     return int(chrom[:mid], 2), int(chrom[mid:], 2)
@@ -23,7 +23,7 @@ def decode_2d_signed(chrom: str) -> tuple[int, int]:
         chrom (str): Chromosome as str
 
     Returns:
-        int: Chromosome as normal int, interpreted as binary bit (e.g. '101' -> 5).
+        int: Chromosomes as two's complement (e.g. '101' -> -3).
     """
     mid = len(chrom) // 2
 
@@ -33,7 +33,6 @@ def decode_2d_signed(chrom: str) -> tuple[int, int]:
         if bits[0] == '1':
             value -= 1 << len(bits)
         return value
-
     return twos_complement(chrom[:mid]), twos_complement(chrom[mid:])
 
 def getFitness(objfunc: Callable, chrom: str) -> float:
@@ -50,6 +49,7 @@ def getFitness(objfunc: Callable, chrom: str) -> float:
     chrom1, chrom2 = decode_2d_signed(chrom)
     # Sample space for fitness = [0, 1]. Prevent div-by-0 error.
     return 1 / (1 + objfunc(chrom1, chrom2))
+    # return objfunc(chrom1, chrom2)
 
 def toPop(objfunc: Callable, lstr: list[str]) -> list[individual]:
     """Get rocords of population from curren generation.
@@ -74,5 +74,5 @@ def toPop(objfunc: Callable, lstr: list[str]) -> list[individual]:
             "fitness": getFitness(objfunc, chrom)
         }
         pop.append(ind)
-        time.sleep(0.3)
+        time.sleep(index.index["buffer"])
     return pop

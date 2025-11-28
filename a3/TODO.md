@@ -4,12 +4,17 @@
 - [x] Separate modules
 - [x] Global/dynamic reimplementation
 - [ ] UI control
+- [ ] Visualizaton (for other objfuncs) 
+  - [ ] graph fix
+  - [ ] point fix
 - [ ] Stats
   - [ ] Stats display
   - [ ] Stats saving
 
 # Features
-- [ ] 2's Complement
+- [x] 2's Complement
+- [ ] Resolution tuning (objfunc)
+- [ ] Fitness score adjust
 - [ ] Reproduction implementation
 
 # Others
