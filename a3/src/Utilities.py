@@ -17,7 +17,7 @@ def decode_2d(chrom: str) -> tuple[int, int]:
     return int(chrom[:mid], 2), int(chrom[mid:], 2)
 
 def decode_2d_signed(chrom: str) -> tuple[int, int]:
-    """Decode string as two signed integers using two's complement.
+    """Decode string as two signed integers using two's complement. (Unused)
     
     Args:
         chrom (str): Chromosome as str

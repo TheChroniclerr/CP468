@@ -1,28 +1,31 @@
 import index
 import threading
 from Visualizer import visualize
-from Generators import generateRand
+from Generators import generateRand, generateRange
 from inputs.ObjectiveFunctions import Slope, DeJongSphere, RosenbrockValley, HimmelblauFunction
 from Generation import newGeneration, nextGeneration
 from dt.individual import individual
 from dt.generation import generation
 
-MAX_POP = 80        # max population size
+MAX_POP = 100        # max population size
 MAX_STRING = 80     # max string length (EVEN NUMBERS RECOMMENDED)
 
-PROBABILITY_MUTATION = 0.05
+PROBABILITY_MUTATION = 0.00
 PROBABILITY_CROSS = 1
 
 BUFFER = 0.01        # Rate to load points in seconds/point
 BOUNDS = (-10.0, 10.0)
 OBJECTIVE_FUNCTION = RosenbrockValley
 
+BL_RANGE = (0.0, -9.0)
+TR_RANGE = (0.0, -9.0)
 
 def main() -> None:
     # wait for visualizer initiation
     index.index["lock"].wait()
     
     # Code    
+    # pop: list[individual] = generateRange(MAX_POP, MAX_STRING, OBJECTIVE_FUNCTION, BOUNDS, BL_RANGE, TR_RANGE)
     pop: list[individual] = generateRand(MAX_POP, MAX_STRING, OBJECTIVE_FUNCTION, BOUNDS)
     gen: generation = newGeneration(pop)    # pop in-place ref
     print(gen["statistics"]["min"]["fitness"], gen["statistics"]["max"]["fitness"], gen["statistics"]["avg"], gen["statistics"]["sum"])

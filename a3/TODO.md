@@ -7,7 +7,7 @@
 - [x] Visualizaton (for other objfuncs) 
   - [x] logarithmatice heatmap
   - [x] point fix
-- [ ] Allow setting initial population range 
+- [x] Allow setting initial population range 
 - [ ] Stats
   - [ ] Stats display
   - [ ] Stats saving
