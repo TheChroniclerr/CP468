@@ -6,10 +6,11 @@ from dt.stats import stats
 from dt.individual import individual
 from dt.generation import generation
 
-def newGeneration(pop: list[individual]) -> generation:
+def newGeneration(num: int, pop: list[individual]) -> generation:
     """Create new generation data given a population of individuals.
 
     Args:
+        num (int): Number for the current generation.
         pop (list[individual]): Records of population with fitness data.
 
     Returns:
@@ -18,18 +19,18 @@ def newGeneration(pop: list[individual]) -> generation:
     cstats: stats = getStats(pop)
     
     gen: generation = {
+        "number": num,
         "population": pop,
         "statistics": cstats
     }
     return gen
 
-def nextGeneration(pop: list[individual], sumfitness: float, objfunc: Callable, bounds: tuple[float, float], pcross: float, pmutation: float) -> generation:
+def nextGeneration(gen: generation, objfunc: Callable, bounds: tuple[float, float], pcross: float, pmutation: float) -> generation:
     """Create new generation through select, crossover, and mutation.
     Note: Generation assume an even-numbered popsize; odd-numbered popsize gets rounded down (popsize -= 1).
 
     Args:
-        pop (list[individual]): Records of population with fitness data.
-        sumfitness (float): Total fitness score of population in current generation.
+        pop (generation): Previous generation data.
         objfunc (Callable): Objective function.
         bounds (tuple[float, float]): Length of bounding square.
         pcross (float): Probability of cross occuring.
@@ -38,6 +39,9 @@ def nextGeneration(pop: list[individual], sumfitness: float, objfunc: Callable, 
     Returns:
         generation: New generation data. (cpy)
     """
+    pop: list[individual] = gen["population"]
+    sumfitness: float = gen["statistics"]["sum"]
+    
     nstr: list[str] = []    # list of strings
     mate1: str              # first mate in pair
     mate2: str              # second mate in pair
@@ -55,4 +59,4 @@ def nextGeneration(pop: list[individual], sumfitness: float, objfunc: Callable, 
         nstr.extend([child1, child2])
         
     npop: list[individual] = toPop(objfunc, nstr, bounds)
-    return newGeneration(npop)
+    return newGeneration(gen["number"] + 1, npop)
