@@ -18,7 +18,7 @@ PROBABILITY_CROSS = 1
 # --- Visualizer Constants ---
 BUFFER = 0.01        # Rate to load points in seconds/point
 BOUNDS = (-10.0, 10.0)
-OBJECTIVE_FUNCTION = HimmelblauFunction
+OBJECTIVE_FUNCTION = DeJongSphere
 
 # --- Generators Constants ---
 BL_RANGE = (0.0, -9.0)

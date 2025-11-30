@@ -28,6 +28,7 @@ def visualize(bounds: tuple[float, float], objfunc: Callable) -> None:
     )
     
     # Contour lines
+    # levels = 20
     # levels = np.logspace(np.log10(Z.min()), np.log10(Z.max()), 8)   # int determines the number of contour lines
     # ax.contour(
     #     X, Y, Z,
