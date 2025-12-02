@@ -8,9 +8,9 @@
   - [x] logarithmatice heatmap
   - [x] point fix
 - [x] Allow setting initial population range 
-- [ ] Stats
-  - [ ] Stats display
-  - [ ] Stats saving
+- [x] Stats
+  - [x] Stats display
+  - [x] Stats saving
 
 # Features
 
